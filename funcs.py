@@ -171,5 +171,3 @@ def constructImage(groups, image):
             newImageRow.append(dicti[tuple(j)])
         newImage.append(newImageRow)
     return newImage
-
-    
