@@ -18,7 +18,7 @@ def createTable(image):
         for j in i:
             if j not in table:
                 table.append(j)
-    print(table)
+    #print(table)
     returnTable = []
     #print(table)
     if len(table) > 256:
@@ -43,12 +43,12 @@ def buildBMP(image, fileAdd):
     w = len(image[0])
     h = len(image)
     table = createTable(image)
-    fSize = 54 + len(table)*4 + w*h
+    fSize = 54 + (len(table)*4) + (w*h)
 
     f.write(bytearray([0x42, 0x4d])) #head - fixo em todo .bmp
     f.write(num2LittleEndian(fSize, 4)) #fileSize - tamanho total que o arquivo ocupa em disco (54 + len(tabela)*4 + len(byteArray))
     f.write(num2LittleEndian(0, 4)) #reserved 4b - inuteis, todos setados em 0
-    f.write(num2LittleEndian(560, 4)) #startingAdd - em que endereço(byte) começa o mapa de bits 
+    f.write(num2LittleEndian(54, 4)) #startingAdd - em que endereço(byte) começa o mapa de bits 
 
     #BITMAPINFOHEADER
 
@@ -70,7 +70,11 @@ def buildBMP(image, fileAdd):
         f.write(num2LittleEndian(0,1))
 
     #gravar indices das cores no arquivo
+    byteList = []
     for i in image:
         for j in i:
-            f.write(getTableIndex(table, j))
+            byteList.append(getTableIndex(table, j))
+
+    for i in byteList[::-1]:
+        f.write(i)
     f.close()
